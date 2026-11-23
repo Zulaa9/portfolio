@@ -2,7 +2,9 @@
  * Datos "en vivo" de los proyectos, leídos de fuentes públicas SOLO al compilar.
  * El navegador nunca hace estas peticiones: el sitio publicado sigue sin terceros.
  *
- * Framewise: usuarios de la ficha de Chrome Web Store (HTML) y de Edge Add-ons (JSON).
+ * Framewise: usuarios de Chrome Web Store (HTML), Edge Add-ons (JSON) y Firefox Add-ons (API pública).
+ * KeyPing en Microsoft Store: adquisiciones de la API de análisis de Partner Center. Solo si el
+ * build tiene las credenciales (MSSTORE_TENANT_ID, MSSTORE_CLIENT_ID, MSSTORE_CLIENT_SECRET).
  * Los textos de los módulos pueden usar marcadores {{keyping.version}}, {{keyping.date}}, etc.
  * Cuando sale una versión nueva, el deploy hook de Cloudflare recompila el sitio y los
  * marcadores toman el valor nuevo. Si la API falla, se usa src/data/live-fallback.json.
@@ -18,18 +20,21 @@ type KeyPingLive = {
   commits: number;
   electron: string;
   angular: string;
-  /** Descargas de instaladores (.exe y .AppImage) de todas las versiones publicadas. */
+  /** Descargas de instaladores (.exe, .AppImage y .apk) de todas las versiones de GitHub Releases. */
   downloads: number;
   /** Líneas de .ts/.html/.css/.scss de keyping-ui en la última versión publicada. */
   lines: number;
 };
 /** Usuarios de Framewise según cada tienda (cifra pública de su ficha). */
-type FramewiseLive = { chrome: number; edge: number; users: number };
+type FramewiseLive = { chrome: number; edge: number; firefox: number; users: number };
+/** Adquisiciones de KeyPing en Microsoft Store (todas las fechas). null = no se cuenta (sin credenciales). */
+type StoreLive = { acquisitions: number | null };
 export type LiveSource = 'api' | 'fallback';
 export type LiveProject = 'keyping' | 'framewise';
 export type LiveData = {
   keyping: KeyPingLive;
   framewise: FramewiseLive;
+  store: StoreLive;
   /** De dónde salió cada proyecto: de su fuente en este build o del respaldo. */
   sources: Record<LiveProject, LiveSource>;
   /** Fecha (AAAA-MM-DD) de los datos de respaldo: se muestra cuando se usan. */
@@ -139,7 +144,7 @@ async function loadKeyPing(): Promise<KeyPingLive> {
   return data;
 }
 
-const FRAMEWISE = { chrome: 'mkpljcojmhhmkpamcdecnmjbndbabfae', edge: 'ppfmagbmfpeldadpbhbknlffhfnnhgee' };
+const FRAMEWISE = { chrome: 'mkpljcojmhhmkpamcdecnmjbndbabfae', edge: 'ppfmagbmfpeldadpbhbknlffhfnnhgee', firefox: 'framewise' };
 
 /** Lee «N users» del HTML de la ficha de Chrome Web Store (no hay API pública). */
 export function parseChromeUsers(html: string): number | null {
@@ -148,17 +153,74 @@ export function parseChromeUsers(html: string): number | null {
 }
 
 async function loadFramewise(): Promise<FramewiseLive> {
-  const [html, edgeJson] = await Promise.all([
+  const [html, edgeJson, amo] = await Promise.all([
     get(`https://chromewebstore.google.com/detail/${FRAMEWISE.chrome}?hl=en`, 'text/html').then((r) => r.text()),
     get(`https://microsoftedge.microsoft.com/addons/getproductdetailsbycrxid/${FRAMEWISE.edge}`, 'application/json').then(
       (r) => r.json() as Promise<{ activeInstallCount?: unknown }>,
+    ),
+    get(`https://addons.mozilla.org/api/v5/addons/addon/${FRAMEWISE.firefox}/`, 'application/json').then(
+      (r) => r.json() as Promise<{ average_daily_users?: unknown }>,
     ),
   ]);
   const chrome = parseChromeUsers(html);
   const edge = edgeJson.activeInstallCount;
   if (chrome === null || !Number.isInteger(chrome)) throw new Error('Chrome Web Store: no aparece la cifra de usuarios');
   if (typeof edge !== 'number' || !Number.isInteger(edge)) throw new Error('Edge Add-ons: no aparece activeInstallCount');
-  return { chrome, edge, users: chrome + edge };
+  // Firefox: media de usuarios diarios que publica la propia ficha de AMO («Usuarios»).
+  const firefox = amo.average_daily_users;
+  if (typeof firefox !== 'number' || !Number.isInteger(firefox)) throw new Error('Firefox Add-ons: no aparece average_daily_users');
+  return { chrome, edge, firefox, users: chrome + edge + firefox };
+}
+
+/** Store ID de KeyPing y día desde el que se suman adquisiciones (antes de la primera publicación). */
+const STORE = { appId: '9N168Z5TZT05', since: '2026-11-01' };
+
+/** Suma acquisitionQuantity de las filas de la API de análisis de Microsoft Store. */
+export function sumAcquisitions(rows: { acquisitionQuantity?: unknown }[]): number {
+  return rows.reduce((sum, r) => sum + (typeof r.acquisitionQuantity === 'number' ? r.acquisitionQuantity : 0), 0);
+}
+
+async function loadStore(): Promise<StoreLive> {
+  const { MSSTORE_TENANT_ID: tenant, MSSTORE_CLIENT_ID: id, MSSTORE_CLIENT_SECRET: secret } = process.env;
+  if (!tenant || !id || !secret) return { acquisitions: null };
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  let token: string;
+  try {
+    const res = await fetch(`https://login.microsoftonline.com/${encodeURIComponent(tenant)}/oauth2/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ grant_type: 'client_credentials', client_id: id, client_secret: secret, resource: 'https://manage.devcenter.microsoft.com' }),
+      signal: ctrl.signal,
+    });
+    // Nunca se registra el cuerpo: podría contener datos de la cuenta.
+    if (!res.ok) throw new Error(`token de Microsoft Entra: HTTP ${res.status}`);
+    token = ((await res.json()) as { access_token?: string }).access_token ?? '';
+    if (!token) throw new Error('token de Microsoft Entra vacío');
+  } finally {
+    clearTimeout(timer);
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  let url: string | null =
+    `https://manage.devcenter.microsoft.com/v1.0/my/analytics/appacquisitions?applicationId=${STORE.appId}` +
+    `&startDate=${STORE.since}&endDate=${today}&aggregationLevel=month&top=10000`;
+  let total = 0;
+  for (let page = 0; url && page < 20; page++) {
+    const c = new AbortController();
+    const t = setTimeout(() => c.abort(), TIMEOUT_MS);
+    try {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }, signal: c.signal });
+      if (!res.ok) throw new Error(`análisis de Microsoft Store: HTTP ${res.status}`);
+      const json = (await res.json()) as { Value?: { acquisitionQuantity?: unknown }[]; '@nextLink'?: string | null };
+      if (!Array.isArray(json.Value)) throw new Error('análisis de Microsoft Store: respuesta sin Value');
+      total += sumAcquisitions(json.Value);
+      const next = json['@nextLink'];
+      url = next ? new URL(next, 'https://manage.devcenter.microsoft.com/v1.0/my/').toString() : null;
+    } finally {
+      clearTimeout(t);
+    }
+  }
+  return { acquisitions: total };
 }
 
 async function attempt<T>(name: string, fn: () => Promise<T>, backup: T, describe: (x: T) => string): Promise<[T, LiveSource]> {
@@ -173,13 +235,18 @@ async function attempt<T>(name: string, fn: () => Promise<T>, backup: T, describ
 }
 
 async function load(): Promise<LiveData> {
-  const base = { keyping: fallback.keyping, framewise: fallback.framewise, fallbackAsOf: fallback.asOf };
+  const storeBackup: StoreLive = { acquisitions: fallback.store.acquisitions };
+  const base = { keyping: fallback.keyping, framewise: fallback.framewise, store: storeBackup, fallbackAsOf: fallback.asOf };
   if (process.env.LIVE_DATA_OFFLINE === '1') return { ...base, sources: { keyping: 'fallback', framewise: 'fallback' } };
-  const [[keyping, k], [framewise, f]] = await Promise.all([
+  const [[keyping, k], [framewise, f], [store, s]] = await Promise.all([
     attempt('KeyPing (GitHub)', loadKeyPing, fallback.keyping, (x) => `v${x.version}, ${x.releases} versiones, ${x.commits} commits, ${x.downloads} descargas, ${x.lines} líneas`),
-    attempt('Framewise (tiendas)', loadFramewise, fallback.framewise, (x) => `${x.users} usuarios (Chrome ${x.chrome} + Edge ${x.edge})`),
+    attempt('Framewise (tiendas)', loadFramewise, fallback.framewise, (x) => `${x.users} usuarios (Chrome ${x.chrome} + Edge ${x.edge} + Firefox ${x.firefox})`),
+    attempt('KeyPing (Microsoft Store)', loadStore, storeBackup, (x) => (x.acquisitions === null ? 'sin credenciales, no se cuenta' : `${x.acquisitions} adquisiciones`)),
   ]);
-  return { ...base, keyping, framewise, sources: { keyping: k, framewise: f } };
+  // La cifra de descargas de KeyPing suma GitHub y la Store: si una de las dos sale del
+  // respaldo, el total lleva la fecha del respaldo.
+  const keypingSource: LiveSource = k === 'fallback' || (s === 'fallback' && store.acquisitions !== null) ? 'fallback' : 'api';
+  return { ...base, keyping, framewise, store, sources: { keyping: keypingSource, framewise: f } };
 }
 
 export const live: LiveData = await load();
@@ -195,6 +262,14 @@ function values(lang: 'en' | 'es', data: LiveData = live): Record<string, string
   const ok = !Number.isNaN(d.getTime());
   const month = ok ? MONTHS[lang][d.getUTCMonth()] : '';
   const nf = new Intl.NumberFormat(lang === 'es' ? 'es-ES' : 'en-US');
+  const store = data.store?.acquisitions ?? null;
+  // Fuente de la cifra de descargas: sin dato de la Store, solo GitHub (como antes).
+  const downloadSources =
+    store === null
+      ? lang === 'es' ? 'GitHub Releases (instaladores)' : 'GitHub Releases (installers)'
+      : lang === 'es'
+        ? `GitHub Releases (${nf.format(k.downloads)} instaladores) + Microsoft Store (${nf.format(store)})`
+        : `GitHub Releases (${nf.format(k.downloads)} installers) + Microsoft Store (${nf.format(store)})`;
   return {
     'keyping.version': k.version,
     'keyping.date': ok ? (lang === 'es' ? `${month} de ${d.getUTCFullYear()}` : `${month} ${d.getUTCFullYear()}`) : '',
@@ -203,12 +278,17 @@ function values(lang: 'en' | 'es', data: LiveData = live): Record<string, string
     'keyping.commits': nf.format(k.commits),
     'keyping.electron': k.electron,
     'keyping.angular': k.angular,
-    'keyping.downloads': nf.format(k.downloads),
+    // Total: instaladores de GitHub + adquisiciones de Microsoft Store (si se cuentan).
+    'keyping.downloads': nf.format(k.downloads + (store ?? 0)),
+    'keyping.githubDownloads': nf.format(k.downloads),
+    'keyping.storeDownloads': store === null ? '' : nf.format(store),
+    'keyping.downloadSources': downloadSources,
     // Redondeado a centenas: «~19.300».
     'keyping.lines': nf.format(Math.round(k.lines / 100) * 100),
     'framewise.users': nf.format(data.framewise.users),
     'framewise.chrome': nf.format(data.framewise.chrome),
     'framewise.edge': nf.format(data.framewise.edge),
+    'framewise.firefox': nf.format(data.framewise.firefox ?? 0),
   };
 }
 
