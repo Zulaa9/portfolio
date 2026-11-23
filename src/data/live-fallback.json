@@ -14,6 +14,10 @@
   "framewise": {
     "chrome": 40,
     "edge": 7,
+    "firefox": 0,
     "users": 47
+  },
+  "store": {
+    "acquisitions": null
   }
 }

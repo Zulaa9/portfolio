@@ -4,7 +4,8 @@ import { countInstallerDownloads, parseChromeUsers, type LiveData } from '../src
 
 const api: LiveData = {
   keyping: { version: '1.3.1', publishedAt: '2026-11-19T03:31:14Z', releases: 9, firstVersion: '1.0.0', commits: 167, electron: '45', angular: '20', downloads: 1234, lines: 19334 },
-  framewise: { chrome: 40, edge: 7, users: 47 },
+  framewise: { chrome: 40, edge: 7, firefox: 0, users: 47 },
+  store: { acquisitions: null },
   sources: { keyping: 'api', framewise: 'api' },
   fallbackAsOf: '2026-11-01',
 };

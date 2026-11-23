@@ -114,8 +114,8 @@
       "value": "{{keyping.downloads}}",
       "unit": "downloads",
       "source": {
-        "en": "GitHub Releases (installers)",
-        "es": "GitHub Releases (instaladores)"
+        "en": "{{keyping.downloadSources}}",
+        "es": "{{keyping.downloadSources}}"
       }
     },
     "status": {
@@ -124,8 +124,8 @@
         "es": "Estado"
       },
       "value": {
-        "en": "Published for Windows, Linux and Android",
-        "es": "Publicado para Windows, Linux y Android"
+        "en": "Published for Windows (Microsoft Store), Linux and Android",
+        "es": "Publicado para Windows (Microsoft Store), Linux y Android"
       },
       "tone": "live",
       "onCard": true

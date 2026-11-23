@@ -14,8 +14,8 @@
       "es": "Framewise | Núcleo del Sistema"
     },
     "description": {
-      "en": "Framewise: Manifest V3 extension for Chrome and Edge for frame-by-frame control of any HTML5 video.",
-      "es": "Framewise: extensión Manifest V3 para Chrome y Edge para controlar fotograma a fotograma cualquier vídeo HTML5."
+      "en": "Framewise: Manifest V3 extension for Chrome, Edge and Firefox for frame-by-frame control of any HTML5 video.",
+      "es": "Framewise: extensión Manifest V3 para Chrome, Edge y Firefox para controlar fotograma a fotograma cualquier vídeo HTML5."
     }
   },
   "node": {
@@ -33,8 +33,8 @@
         "es": "Framewise"
       },
       "copy": {
-        "en": "Published Chrome and Edge extension for precise control of any HTML5 video.",
-        "es": "Extensión publicada para Chrome y Edge para controlar con precisión cualquier vídeo HTML5."
+        "en": "Published Chrome, Edge and Firefox extension for precise control of any HTML5 video.",
+        "es": "Extensión publicada para Chrome, Edge y Firefox para controlar con precisión cualquier vídeo HTML5."
       }
     },
     "position": {
@@ -53,8 +53,8 @@
       "es": "EXTENSIÓN DE NAVEGADOR // PUBLICADA"
     },
     "summary": {
-      "en": "Manifest V3 extension for Chrome and Edge that controls any HTML5 video: frame-by-frame stepping, speed presets, volume amplification and per-site shortcuts.",
-      "es": "Extensión Manifest V3 para Chrome y Edge que controla cualquier vídeo HTML5: avance fotograma a fotograma, presets de velocidad, volumen amplificado y atajos por sitio."
+      "en": "Manifest V3 extension for Chrome, Edge and Firefox that controls any HTML5 video: frame-by-frame stepping, speed presets, volume amplification and per-site shortcuts.",
+      "es": "Extensión Manifest V3 para Chrome, Edge y Firefox que controla cualquier vídeo HTML5: avance fotograma a fotograma, presets de velocidad, volumen amplificado y atajos por sitio."
     },
     "enterLabel": {
       "en": "Open project",
@@ -79,8 +79,8 @@
         "es": "MediaRecorder"
       },
       {
-        "en": "Chrome / Edge",
-        "es": "Chrome / Edge"
+        "en": "Chrome / Edge / Firefox",
+        "es": "Chrome / Edge / Firefox"
       }
     ],
     "stackTitle": {
@@ -118,8 +118,8 @@
       "value": "{{framewise.users}}",
       "unit": "users",
       "source": {
-        "en": "Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}})",
-        "es": "Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}})"
+        "en": "Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}}) + Firefox Add-ons ({{framewise.firefox}})",
+        "es": "Chrome Web Store ({{framewise.chrome}}) + Edge Add-ons ({{framewise.edge}}) + Firefox Add-ons ({{framewise.firefox}})"
       }
     },
     "status": {
@@ -128,8 +128,8 @@
         "es": "Estado"
       },
       "value": {
-        "en": "Published on Chrome Web Store and Edge Add-ons",
-        "es": "Publicada en Chrome Web Store y Edge Add-ons"
+        "en": "Published on Chrome Web Store, Edge Add-ons and Firefox Add-ons",
+        "es": "Publicada en Chrome Web Store, Edge Add-ons y Firefox Add-ons"
       },
       "tone": "live",
       "onCard": true
@@ -144,8 +144,8 @@
         "es": "Framewise"
       },
       "lead": {
-        "en": "Browser extension for frame-level control of any HTML5 video, published for Chrome and Edge.",
-        "es": "Extensión de navegador para controlar a nivel de fotograma cualquier vídeo HTML5, publicada para Chrome y Edge."
+        "en": "Browser extension for frame-level control of any HTML5 video, published for Chrome, Edge and Firefox.",
+        "es": "Extensión de navegador para controlar a nivel de fotograma cualquier vídeo HTML5, publicada para Chrome, Edge y Firefox."
       }
     },
     "description": {

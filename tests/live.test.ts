@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { gzipSync } from 'node:zlib';
-import { countCodeLines, interpolateLive, live } from '../src/lib/live';
+import { countCodeLines, interpolateLive, live, sumAcquisitions } from '../src/lib/live';
 
 describe('datos en vivo', () => {
   it('sin red usa los datos de respaldo', () => {
@@ -9,12 +9,27 @@ describe('datos en vivo', () => {
   });
 
   it('sustituye marcadores y deja los desconocidos', () => {
-    const data = { sources: { keyping: 'api' as const, framewise: 'api' as const }, fallbackAsOf: '2026-11-19', framewise: { chrome: 1, edge: 1, users: 2 }, keyping: { version: '2.0.0', publishedAt: '2027-03-05T10:00:00Z', releases: 12, firstVersion: '1.0.0', commits: 1234, electron: '46', angular: '21', downloads: 66, lines: 19334 } };
+    const data = { sources: { keyping: 'api' as const, framewise: 'api' as const }, fallbackAsOf: '2026-11-19', framewise: { chrome: 1, edge: 1, firefox: 0, users: 2 }, store: { acquisitions: null }, keyping: { version: '2.0.0', publishedAt: '2027-03-05T10:00:00Z', releases: 12, firstVersion: '1.0.0', commits: 1234, electron: '46', angular: '21', downloads: 66, lines: 19334 } };
     expect(interpolateLive('v{{keyping.version}} ({{keyping.date}})', 'en', data)).toBe('v2.0.0 (March 2027)');
     expect(interpolateLive('v{{keyping.version}} ({{keyping.date}})', 'es', data)).toBe('v2.0.0 (marzo de 2027)');
     expect(interpolateLive('{{keyping.commits}} commits', 'en', data)).toBe('1,234 commits');
     expect(interpolateLive('{{otro.dato}}', 'en', data)).toBe('{{otro.dato}}');
     expect(interpolateLive('sin marcadores', 'es', data)).toBe('sin marcadores');
+  });
+
+  it('suma Microsoft Store a las descargas solo si hay dato', () => {
+    const base = { sources: { keyping: 'api' as const, framewise: 'api' as const }, fallbackAsOf: '2026-11-19', framewise: { chrome: 1, edge: 2, firefox: 3, users: 6 }, keyping: { version: '2.0.0', publishedAt: '2027-03-05T10:00:00Z', releases: 12, firstVersion: '1.0.0', commits: 1, electron: '46', angular: '21', downloads: 1500, lines: 1 } };
+    const sin = { ...base, store: { acquisitions: null } };
+    const con = { ...base, store: { acquisitions: 25 } };
+    expect(interpolateLive('{{keyping.downloads}} · {{keyping.downloadSources}}', 'es', sin)).toBe('1500 · GitHub Releases (instaladores)');
+    expect(interpolateLive('{{keyping.downloads}} · {{keyping.downloadSources}}', 'es', con)).toBe('1525 · GitHub Releases (1500 instaladores) + Microsoft Store (25)');
+    expect(interpolateLive('{{keyping.downloads}} · {{keyping.downloadSources}}', 'en', con)).toBe('1,525 · GitHub Releases (1,500 installers) + Microsoft Store (25)');
+    expect(interpolateLive('{{framewise.firefox}}', 'en', con)).toBe('3');
+  });
+
+  it('suma acquisitionQuantity e ignora filas sin número', () => {
+    expect(sumAcquisitions([{ acquisitionQuantity: 3 }, { acquisitionQuantity: 4 }, {}, { acquisitionQuantity: '9' }])).toBe(7);
+    expect(sumAcquisitions([])).toBe(0);
   });
 });
 
