@@ -32,7 +32,7 @@ const coreData = {
 };
 // Datos estructurados de la persona (nombre, rol y perfiles públicos enlazados en los módulos).
 const sameAs = [...new Set(modules.flatMap((m) => (m.data.template === 'section' ? m.data.section.blocks : []).flatMap((b) => (b.type === 'links' ? b.links.map((l) => l.url) : [])).filter((u) => /^https:/.test(u))))];
-const person = { '@context': 'https://schema.org', '@type': 'Person', name: 'Unax Zulaika Fuente', url: Astro.site!.href, jobTitle: t.site.identityRole, sameAs };
+const person = { '@context': 'https://schema.org', '@type': 'Person', name: 'Unax Zulaika Fuente', alternateName: 'Zula', url: Astro.site!.href, jobTitle: t.site.identityRole, sameAs };
 const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
 // Móvil: las ramas como árbol (raíces y sus hijos), igual que el mapa de escritorio.
 const featuredNode = nodes.find((n) => n.id === featured?.id);
