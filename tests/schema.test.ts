@@ -6,8 +6,8 @@ const modules = readModules();
 const byId = (id: string) => clone(modules.find((m) => m.id === id)!);
 
 describe('contenido actual', () => {
-  it('existen los nueve módulos del portfolio', () => {
-    expect(modules.map((m) => m.id).sort()).toEqual(['about', 'capabilities', 'contact', 'framewise', 'keyping', 'nemulo', 'portfolio-core', 'projects', 'work']);
+  it('existen los ocho módulos del portfolio', () => {
+    expect(modules.map((m) => m.id).sort()).toEqual(['about', 'capabilities', 'framewise', 'keyping', 'nemulo', 'portfolio-core', 'projects', 'work']);
   });
 
   it.each(modules.map((m) => [m.id, m.data]))('"%s" cumple el esquema', (_id, data) => {
@@ -29,8 +29,8 @@ describe('contenido actual', () => {
     expect(byId('keyping').data.project.layout).toBe('flagship');
   });
 
-  it('las rutas son las del sitio anterior más los proyectos nuevos', () => {
-    expect(modules.map((m) => m.data.path).sort()).toEqual(['about', 'capabilities', 'contact', 'projects', 'projects/framewise', 'projects/keyping', 'projects/nemulo', 'projects/portfolio-core', 'work']);
+  it('las rutas son las del sitio anterior más los proyectos nuevos y Hablemos (sustituye a contact)', () => {
+    expect(modules.map((m) => m.data.path).sort()).toEqual(['about', 'capabilities', 'projects', 'projects/framewise', 'projects/keyping', 'projects/nemulo', 'projects/portfolio-core', 'work']);
   });
 
   it('no quedan enlaces al repositorio antiguo ni a zulaa9.github.io como web', () => {
@@ -53,7 +53,7 @@ describe('datos no válidos', () => {
   });
 
   it('enlace con formato incorrecto', () => {
-    const d = byId('contact').data;
+    const d = byId('work').data;
     d.section.blocks[0].links[0].url = 'correo@ejemplo';
     expect(issues(d).join('\n')).toMatch(/Enlace no válido/);
   });
@@ -110,7 +110,7 @@ describe('datos no válidos', () => {
 describe('reglas entre módulos', () => {
   it('rutas duplicadas', () => {
     const list = clone(modules);
-    list.find((m) => m.id === 'contact')!.data.path = 'about';
+    list.find((m) => m.id === 'work')!.data.path = 'about';
     expect(crossValidate(list).join('\n')).toMatch(/misma ruta "\/about\/"/);
   });
 

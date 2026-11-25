@@ -78,10 +78,10 @@
         "en": "Next step",
         "es": "Siguiente paso"
       },
-      "contactModule": "contact",
+      "contactModule": "work",
       "contactLabel": {
-        "en": "Open contact",
-        "es": "Abrir contacto"
+        "en": "Let's talk",
+        "es": "Hablemos"
       },
       "cvLabel": {
         "en": "Download CV",
