@@ -14,7 +14,7 @@ const en = ui('en');
 const es = ui('es');
 const modules = await getVisibleModules();
 // Accesos directos: el producto principal y las secciones de primer nivel más útiles.
-const SHORTCUTS = ['keyping', 'projects', 'about', 'contact'];
+const SHORTCUTS = ['keyping', 'projects', 'about', 'work'];
 const shortcuts = SHORTCUTS.map((id) => modules.find((m) => m.id === id)).filter((m) => !!m);
 ---
 <BaseLayout lang="en" title={en.notFound.title} description={en.notFound.description} path={null} bodyClass="page-shell route-missing" shellLabel="404" statusText={en.notFound.status}>

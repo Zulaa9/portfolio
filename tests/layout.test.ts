@@ -11,20 +11,18 @@ describe('disposición de nodos del Core', () => {
     expect(Object.fromEntries(pos)).toEqual({
       about: { x: 0.22, y: 0.24 },
       capabilities: { x: 0.2, y: 0.45 },
-      contact: { x: 0.31, y: 0.64 },
       projects: { x: 0.78, y: 0.28 },
       keyping: { x: 0.74, y: 0.48 },
       framewise: { x: 0.88, y: 0.42 },
       nemulo: { x: 0.65, y: 0.7 },
       'portfolio-core': { x: 0.86, y: 0.66 },
-      work: { x: 0.5, y: 0.1 },
+      work: { x: 0.31, y: 0.64 },
     });
   });
 
-  it('coloca un módulo nuevo sin posición en un hueco libre y separado', () => {
+  it('coloca módulos nuevos sin posición en huecos libres y separados', () => {
     const input = modules.map((m) => ({ id: m.id, position: m.data.node.position, parent: m.data.parent }));
-    // Con 9 módulos visibles solo cabe uno más (máximo 10 nodos).
-    input.push({ id: 'nuevo-1', position: undefined, parent: 'projects' });
+    input.push({ id: 'nuevo-1', position: undefined, parent: 'projects' }, { id: 'nuevo-2', position: undefined, parent: undefined });
     const pos = [...layoutNodes(input).values()];
     for (let i = 0; i < pos.length; i += 1) {
       for (let j = i + 1; j < pos.length; j += 1) {

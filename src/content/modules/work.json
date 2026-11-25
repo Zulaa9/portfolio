@@ -1,8 +1,9 @@
 {
   "template": "section",
-  "order": 45,
+  "order": 50,
   "visible": true,
   "path": "work",
+  "parent": "about",
   "crumb": {
     "en": "Work with me",
     "es": "Hablemos"
@@ -13,8 +14,8 @@
       "es": "¿Necesitas una web o una herramienta? Hablemos | Núcleo del Sistema"
     },
     "description": {
-      "en": "Websites, web applications and custom tools by Unax Zulaika Fuente (Zula), from the idea to publication.",
-      "es": "Webs, aplicaciones web y herramientas a medida de Unax Zulaika Fuente (Zula), desde la idea hasta la publicación."
+      "en": "Contact Unax Zulaika Fuente (Zula): websites, web applications and custom tools, collaborations and job offers.",
+      "es": "Contacto de Unax Zulaika Fuente (Zula): webs, aplicaciones web y herramientas a medida, colaboraciones y ofertas de trabajo."
     }
   },
   "node": {
@@ -23,8 +24,8 @@
       "es": "Hablemos"
     },
     "meta": {
-      "en": "Work",
-      "es": "Encargos"
+      "en": "Contact",
+      "es": "Contacto"
     },
     "dock": {
       "title": {
@@ -37,23 +38,23 @@
       }
     },
     "position": {
-      "x": 0.5,
-      "y": 0.1
+      "x": 0.31,
+      "y": 0.64
     }
   },
   "section": {
     "header": {
       "eyebrow": {
-        "en": "WORK WITH ME",
-        "es": "ENCARGOS"
+        "en": "CONTACT",
+        "es": "CONTACTO"
       },
       "title": {
         "en": "Need a website or a tool? Let's talk",
         "es": "¿Necesitas una web o una herramienta? Hablemos"
       },
       "lead": {
-        "en": "I build websites, web applications and custom tools for businesses and people, from the first idea to publication. Tell me what you need and I'll tell you honestly whether I can help.",
-        "es": "Hago webs, aplicaciones web y herramientas a medida para negocios y personas, desde la primera idea hasta la publicación. Cuéntame qué necesitas y te diré con sinceridad si puedo ayudarte."
+        "en": "I build websites, web applications and custom tools for businesses and people, from the first idea to publication. Tell me what you need and I'll tell you honestly whether I can help. Collaborations and job offers are welcome too.",
+        "es": "Hago webs, aplicaciones web y herramientas a medida para negocios y personas, desde la primera idea hasta la publicación. Cuéntame qué necesitas y te diré con sinceridad si puedo ayudarte. También estoy abierto a colaboraciones y ofertas de trabajo."
       },
       "leadSize": "large"
     },
@@ -67,10 +68,24 @@
               "es": "Correo"
             },
             "subtitle": {
-              "en": "Tell me about your project",
-              "es": "Cuéntame tu proyecto"
+              "en": "Projects, collaborations or job offers",
+              "es": "Proyectos, colaboraciones u ofertas de trabajo"
             },
             "url": "mailto:unax.zulaika.fuente@gmail.com"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "variant": "lines",
+        "paragraphs": [
+          {
+            "en": "Based in Bilbao, Spain",
+            "es": "Ubicado en Bilbao, España"
+          },
+          {
+            "en": "Available for remote work",
+            "es": "Disponible para trabajar en remoto"
           }
         ]
       },
