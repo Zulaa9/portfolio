@@ -26,7 +26,7 @@ const shortcuts = SHORTCUTS.map((id) => modules.find((m) => m.id === id)).filter
         var stored = null;
         try { stored = localStorage.getItem('system_core_lang'); } catch (e) {}
         var es = location.pathname.indexOf('/es/') === 0 || location.pathname === '/es' || (stored === 'es' && location.pathname.indexOf('/en/') !== 0);
-        if (es) { document.documentElement.lang = 'es'; document.title = 'Módulo no encontrado | Núcleo del Sistema'; }
+        if (es) { document.documentElement.lang = 'es'; document.title = 'Módulo no encontrado | Unax Zulaika Fuente'; }
       })();
     </script>
   </Fragment>
