@@ -1,0 +1,216 @@
+{
+  "template": "section",
+  "order": 45,
+  "visible": true,
+  "path": "work",
+  "crumb": {
+    "en": "Work with me",
+    "es": "Hablemos"
+  },
+  "seo": {
+    "title": {
+      "en": "Need a website or a tool? Let's talk | System Core",
+      "es": "¿Necesitas una web o una herramienta? Hablemos | Núcleo del Sistema"
+    },
+    "description": {
+      "en": "Websites, web applications and custom tools by Unax Zulaika Fuente (Zula), from the idea to publication.",
+      "es": "Webs, aplicaciones web y herramientas a medida de Unax Zulaika Fuente (Zula), desde la idea hasta la publicación."
+    }
+  },
+  "node": {
+    "title": {
+      "en": "Let's talk",
+      "es": "Hablemos"
+    },
+    "meta": {
+      "en": "Work",
+      "es": "Encargos"
+    },
+    "dock": {
+      "title": {
+        "en": "Need a website or a tool?",
+        "es": "¿Necesitas una web o una herramienta?"
+      },
+      "copy": {
+        "en": "Websites, web applications and custom tools, from the idea to publication. Tell me what you need.",
+        "es": "Webs, aplicaciones web y herramientas a medida, desde la idea hasta la publicación. Cuéntame qué necesitas."
+      }
+    },
+    "position": {
+      "x": 0.5,
+      "y": 0.1
+    }
+  },
+  "section": {
+    "header": {
+      "eyebrow": {
+        "en": "WORK WITH ME",
+        "es": "ENCARGOS"
+      },
+      "title": {
+        "en": "Need a website or a tool? Let's talk",
+        "es": "¿Necesitas una web o una herramienta? Hablemos"
+      },
+      "lead": {
+        "en": "I build websites, web applications and custom tools for businesses and people, from the first idea to publication. Tell me what you need and I'll tell you honestly whether I can help.",
+        "es": "Hago webs, aplicaciones web y herramientas a medida para negocios y personas, desde la primera idea hasta la publicación. Cuéntame qué necesitas y te diré con sinceridad si puedo ayudarte."
+      },
+      "leadSize": "large"
+    },
+    "blocks": [
+      {
+        "type": "links",
+        "links": [
+          {
+            "label": {
+              "en": "Email",
+              "es": "Correo"
+            },
+            "subtitle": {
+              "en": "Tell me about your project",
+              "es": "Cuéntame tu proyecto"
+            },
+            "url": "mailto:unax.zulaika.fuente@gmail.com"
+          }
+        ]
+      },
+      {
+        "type": "cards",
+        "title": {
+          "en": "What I can build",
+          "es": "Qué puedo hacer"
+        },
+        "cards": [
+          {
+            "tag": {
+              "en": "Web",
+              "es": "Web"
+            },
+            "title": {
+              "en": "Websites and landing pages",
+              "es": "Webs y páginas de producto"
+            },
+            "desc": {
+              "en": "Fast, bilingual websites with no cookies or trackers, ready to appear in search engines.",
+              "es": "Webs rápidas y bilingües, sin cookies ni rastreadores, preparadas para aparecer en buscadores."
+            },
+            "points": [
+              {
+                "en": "Examples: keyping.zula.dev and framewise.zula.dev",
+                "es": "Ejemplos: keyping.zula.dev y framewise.zula.dev"
+              },
+              {
+                "en": "I take care of hosting, domain and publication",
+                "es": "Me encargo del alojamiento, el dominio y la publicación"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Applications",
+              "es": "Aplicaciones"
+            },
+            "title": {
+              "en": "Web applications and management panels",
+              "es": "Aplicaciones web y paneles de gestión"
+            },
+            "desc": {
+              "en": "Bookings, customers, internal processes: software that fits how your business already works.",
+              "es": "Reservas, clientes, procesos internos: software que se adapta a cómo ya trabaja tu negocio."
+            },
+            "points": [
+              {
+                "en": "Example: Nemulo, a bookings and management platform for local businesses",
+                "es": "Ejemplo: Nemulo, plataforma de reservas y gestión para negocios locales"
+              },
+              {
+                "en": "Users, roles and data protection designed in from the start",
+                "es": "Usuarios, permisos y protección de datos pensados desde el principio"
+              }
+            ]
+          },
+          {
+            "tag": {
+              "en": "Tools",
+              "es": "Herramientas"
+            },
+            "title": {
+              "en": "Custom tools",
+              "es": "Herramientas a medida"
+            },
+            "desc": {
+              "en": "Browser extensions, desktop and mobile apps, and automations for repetitive tasks.",
+              "es": "Extensiones de navegador, aplicaciones de escritorio y móvil, y automatizaciones de tareas repetitivas."
+            },
+            "points": [
+              {
+                "en": "Examples: Framewise (Chrome, Edge and Firefox) and KeyPing (Windows, Linux and Android)",
+                "es": "Ejemplos: Framewise (Chrome, Edge y Firefox) y KeyPing (Windows, Linux y Android)"
+              },
+              {
+                "en": "Published in official stores when it makes sense",
+                "es": "Publicadas en tiendas oficiales cuando tiene sentido"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "title": {
+          "en": "How it works",
+          "es": "Cómo trabajo"
+        },
+        "items": [
+          {
+            "en": "You tell me what you need by email, in your own words",
+            "es": "Me cuentas por correo qué necesitas, con tus palabras"
+          },
+          {
+            "en": "We talk it through and I send you a written proposal: scope, timeline and price",
+            "es": "Lo hablamos y te envío una propuesta por escrito: alcance, plazos y precio"
+          },
+          {
+            "en": "I build it in short steps you can review along the way",
+            "es": "Lo desarrollo en pasos cortos que puedes revisar por el camino"
+          },
+          {
+            "en": "I publish it and hand over everything: code, access and documentation",
+            "es": "Lo publico y te entrego todo: código, accesos y documentación"
+          }
+        ]
+      },
+      {
+        "type": "links",
+        "title": {
+          "en": "Follow my work",
+          "es": "Sigue mi trabajo"
+        },
+        "links": [
+          {
+            "label": {
+              "en": "GitHub",
+              "es": "GitHub"
+            },
+            "subtitle": {
+              "en": "Repositories and releases",
+              "es": "Repositorios y versiones"
+            },
+            "url": "https://github.com/Zulaa9"
+          },
+          {
+            "label": {
+              "en": "LinkedIn",
+              "es": "LinkedIn"
+            },
+            "subtitle": {
+              "en": "Professional profile",
+              "es": "Perfil profesional"
+            },
+            "url": "https://www.linkedin.com/in/unax-zulaika-fuente/"
+          }
+        ]
+      }
+    ]
+  }
+}
