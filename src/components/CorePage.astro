@@ -32,7 +32,14 @@ const coreData = {
 };
 // Datos estructurados de la persona (nombre, rol y perfiles públicos enlazados en los módulos).
 const sameAs = [...new Set(modules.flatMap((m) => (m.data.template === 'section' ? m.data.section.blocks : []).flatMap((b) => (b.type === 'links' ? b.links.map((l) => l.url) : [])).filter((u) => /^https:/.test(u))))];
-const person = { '@context': 'https://schema.org', '@type': 'Person', name: 'Unax Zulaika Fuente', alternateName: 'Zula', url: Astro.site!.href, jobTitle: t.site.identityRole, sameAs };
+const person = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Person', '@id': new URL('/#person', Astro.site).href, name: 'Unax Zulaika Fuente', alternateName: 'Zula', url: Astro.site!.href, jobTitle: t.site.identityRole, description: t.core.page.description, address: { '@type': 'PostalAddress', addressLocality: 'Bilbao', addressCountry: 'ES' }, sameAs },
+    { '@type': 'WebSite', '@id': new URL('/#website', Astro.site).href, name: 'Zula', alternateName: 'Unax Zulaika Fuente', url: Astro.site!.href, inLanguage: lang, publisher: { '@id': new URL('/#person', Astro.site).href } },
+    ...[['KeyPing', 'https://keyping.zula.dev/'], ['Framewise', 'https://framewise.zula.dev/']].map(([name, url]) => ({ '@type': 'SoftwareApplication', '@id': `${url}#app`, name, url, author: { '@id': new URL('/#person', Astro.site).href } })),
+  ],
+};
 const featuredDock = nodes.find((n) => n.id === featured?.id)?.dock;
 // Móvil: las ramas como árbol (raíces y sus hijos), igual que el mapa de escritorio.
 const featuredNode = nodes.find((n) => n.id === featured?.id);

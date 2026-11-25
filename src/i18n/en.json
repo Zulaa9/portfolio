@@ -22,8 +22,8 @@
   },
   "core": {
     "page": {
-      "title": "Unax Zulaika | System Core",
-      "description": "System Core interface for Unax Zulaika Fuente portfolio and KeyPing as the flagship product."
+      "title": "Unax Zulaika Fuente (Zula) · Software Engineer",
+      "description": "Unax Zulaika Fuente (Zula), software engineer in Bilbao, Spain. Creator of KeyPing (password manager) and Framewise (video browser extension). Custom websites and tools."
     },
     "startup": {
       "eyebrow": "SYSTEM CORE // OFFLINE",
@@ -88,7 +88,7 @@
     }
   },
   "notFound": {
-    "title": "Module not found | System Core",
+    "title": "Module not found | Unax Zulaika Fuente",
     "description": "The requested route does not exist.",
     "eyebrow": "ERROR // 404",
     "heading": "Module not found",
