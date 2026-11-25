@@ -17,12 +17,14 @@ describe('disposición de nodos del Core', () => {
       framewise: { x: 0.88, y: 0.42 },
       nemulo: { x: 0.65, y: 0.7 },
       'portfolio-core': { x: 0.86, y: 0.66 },
+      work: { x: 0.5, y: 0.1 },
     });
   });
 
-  it('coloca módulos nuevos sin posición en huecos libres y separados', () => {
+  it('coloca un módulo nuevo sin posición en un hueco libre y separado', () => {
     const input = modules.map((m) => ({ id: m.id, position: m.data.node.position, parent: m.data.parent }));
-    input.push({ id: 'nuevo-1', position: undefined, parent: 'projects' }, { id: 'nuevo-2', position: undefined, parent: undefined });
+    // Con 9 módulos visibles solo cabe uno más (máximo 10 nodos).
+    input.push({ id: 'nuevo-1', position: undefined, parent: 'projects' });
     const pos = [...layoutNodes(input).values()];
     for (let i = 0; i < pos.length; i += 1) {
       for (let j = i + 1; j < pos.length; j += 1) {
